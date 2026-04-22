@@ -1,0 +1,71 @@
+---
+import background from '../assets/background.svg';
+import { Font } from "astro:assets";
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" href="/favicon.ico" />
+		<meta name="generator" content={Astro.generator} />
+		<title>Astro Basics</title>
+		<Font cssVariable="--font-moonhouse" />
+		<Font cssVariable="--font-quicksand" />
+	</head>
+	<body>
+		<img id="background" src={background.src} alt="" fetchpriority="high" style="filter: grayscale(1) blur(5px);" />
+		<div class="page">
+			<div class="content">
+				<slot />
+			</div>
+		</div>
+	</body>
+</html>
+
+<style>
+	html,
+	body {
+		margin: 0;
+		width: 100%;
+		height: 100%;
+		position: relative;
+	}
+
+	:global(p),
+	:global(h1),
+	:global(h2),
+	:global(h3),
+	:global(h4),
+	:global(h5),
+	:global(h6) {
+		font-family: var(--font-quicksand), sans-serif;
+	}
+
+	.page {
+		min-height: 100vh;
+		display: flex;
+		justify-content: center;
+		padding: 4.5rem 1.5rem 6rem;
+		box-sizing: border-box;
+	}
+
+	.content {
+		width: 100%;
+		max-width: 720px;
+		position: relative;
+	}
+
+	#background {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		z-index: -1;
+	}
+
+
+</style>

@@ -1,0 +1,19 @@
+---
+const bday = "2009-03-20T00:00:00";
+---
+
+<p>been living for <b><span id="bday-text"></span></b> years</p>
+
+<script>
+    const date = new Date("2009-03-20T00:00:00");
+
+    function update() {
+        const now = Date.now();
+        const diff = now - date.getTime();
+
+        const years = diff / (1000 * 60 * 60 * 24 * 365.25);
+        document.getElementById("bday-text")!.textContent = years.toFixed(9);
+    }
+
+    setInterval(update, 33);
+</script>
