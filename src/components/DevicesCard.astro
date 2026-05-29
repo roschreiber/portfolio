@@ -1,0 +1,89 @@
+---
+import { PlugZapIcon } from "./animate-ui/PlugZapIcon";
+import { LoaderIcon } from "./animate-ui/LoaderIcon";
+import DeviceSlug from "./sub/DeviceSlug.astro";
+
+const res = await fetch(new URL("/api/battery", Astro.url));
+const devices: {
+  deviceName: string;
+  battery: number;
+  charging: boolean;
+  image: string;
+  refresh: string;
+}[] = res.ok ? await res.json() : [];
+
+const lsRefresh = devices[0]?.refresh;
+const minutesAgo = lsRefresh
+  ? Math.floor((Date.now() - new Date(lsRefresh).getTime()) / 60000)
+  : null;
+---
+
+<div
+  class="devices-card relative w-full rounded-lg border-2 border-[#DCDCDC] bg-[#F7F7F6]/60 px-4 py-3 text-base font-medium"
+>
+  <div class="flex w-full items-center justify-between">
+    <p class="flex items-center gap-1.5 text-xs leading-tight">
+      <PlugZapIcon client:load className="mb-0.5" /><span
+        class="font-semibold -ml-px">devices & battery status</span
+      >
+    </p>
+    <div class="flex items-center gap-1 opacity-80">
+      <p class="text-[10px] leading-tight">last updated {minutesAgo}m ago</p>
+      <LoaderIcon className="opacity-80 w-3.5 h-3.5 mb-0.45" client:load />
+    </div>
+  </div>
+  <div class="devices-card__list mt-3">
+    {
+      devices.map(
+        (device: {
+          deviceName: string;
+          battery: number;
+          charging: boolean;
+          image: string;
+          refresh: string;
+        }) => (
+          <DeviceSlug
+            deviceName={device.deviceName}
+            battery={device.battery}
+            charging={device.charging}
+            image={device.image}
+            refresh={device.refresh}
+          />
+        ),
+      )
+    }
+  </div>
+</div>
+
+<script>
+  async function fetchDevices() {
+    const res = await fetch("/api/battery");
+    const devices = res.ok ? await res.json() : [];
+  }
+
+  fetchDevices();
+  window.setInterval(fetchDevices, 60000);
+</script>
+
+<style>
+  .devices-card {
+    min-height: 12.5rem;
+  }
+
+  .devices-card__list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  @media (min-width: 760px) {
+    .devices-card__list {
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+
+    .devices-card__list :global(.device-slug) {
+      flex: 1 1 14rem;
+    }
+  }
+</style>

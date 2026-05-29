@@ -1,0 +1,72 @@
+@import "tailwindcss";
+@import "@fontsource-variable/geist";
+
+html,
+body {
+  width: 100%;
+  min-height: 100%;
+  position: relative;
+}
+
+html {
+  font-family: 'Geist Variable', sans-serif;
+}
+
+body {
+  margin: 0;
+  background-color: oklch(1 0 0);
+  color: oklch(0.145 0 0);
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-quicksand), sans-serif;
+}
+
+.font-moonhouse {
+  font-family: var(--font-moonhouse), sans-serif;
+}
+
+.font-quicksand {
+  font-family: var(--font-quicksand), sans-serif;
+}
+
+:root {
+  --portfolio-cards-max-width: 84rem;
+}
+
+.portfolio-cards {
+  --cards-gap: 1rem;
+  display: flex;
+  width: min(100%, var(--portfolio-cards-max-width));
+  flex-direction: column;
+  gap: var(--cards-gap);
+}
+
+.portfolio-card-primary,
+.portfolio-card-secondary {
+  width: 100%;
+}
+
+@media (min-width: 760px) {
+  .portfolio-cards {
+    --sidebar-width: clamp(18rem, 24vw, 26rem);
+    flex-direction: row;
+    align-items: stretch;
+  }
+
+  .portfolio-card-primary {
+    flex: 1 1 calc(100% - var(--sidebar-width) - var(--cards-gap));
+    max-width: calc(100% - var(--sidebar-width) - var(--cards-gap));
+  }
+
+  .portfolio-card-secondary {
+    flex: 0 1 var(--sidebar-width);
+    max-width: var(--sidebar-width);
+  }
+}

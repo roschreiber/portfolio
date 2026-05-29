@@ -2,58 +2,12 @@
 import Birthday from "./Birthday.astro"
 ---
 
-<header class="hero">
-    <a class="brand" href="/" aria-label="Home">
-        <span class="roblogo">
-            <span class="logo-r">r</span>
-            <span class="logo-dot">.</span>
+<header class="flex flex-col items-start gap-1">
+    <a class="inline-flex items-center gap-[0.18rem] text-black no-underline" href="/" aria-label="Home">
+        <span class="flex items-center text-5xl font-bold leading-none ml-[0.095rem]">
+            <span class="font-moonhouse text-black">r</span>
+            <span class="font-moonhouse text-black ml-[-0.43rem]">.</span>
         </span>
-        <span class="robtext">rob</span>
+        <span class="text-[2.4rem] font-quicksand font-bold leading-none text-black ml-2">rob</span>
     </a>
-    <Birthday />
 </header>
-
-<style>
-    .hero {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.25rem;
-    }
-
-    .brand {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.18rem;
-        color: black;
-        text-decoration: none;
-    }
-
-    .roblogo {
-        display: flex;
-        align-items: center;
-        font-size: 3rem;
-        font-weight: 700;
-        line-height: 1;
-        margin-left: 0.095rem;
-    }
-
-    .robtext {
-        font-size: 2.4rem;
-        font-family: var(--font-quicksand), sans-serif;
-        font-weight: bold;
-        line-height: 1;
-        color: black;
-        margin-left: 0.5rem;
-    }
-
-    .logo-r,
-    .logo-dot {
-        font-family: var(--font-moonhouse), sans-serif;
-        color: black;
-    }
-
-    .logo-dot {
-        margin-left: -0.28rem;
-    }
-</style>

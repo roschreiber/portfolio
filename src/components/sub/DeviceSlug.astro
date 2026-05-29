@@ -1,0 +1,51 @@
+---
+import placeholder from "../../assets/imgs/placeholder.png";
+import BatteryIcon from "./BatteryIcon.astro";
+const { deviceName, battery, charging, image, refresh } = Astro.props;
+const imageSrc = image ? `/imgs/devices/${image}` : placeholder.src;
+---
+
+<div
+  class="device-slug relative rounded-lg border border-[#DCDCDC] bg-[#F7F7F6]/60 px-4 py-3 text-base font-medium"
+>
+  <div class="device-slug__body flex w-full items-start gap-4 mt-1.5">
+    <img src={imageSrc} alt={`${deviceName} image`} class="device-slug__image object-cover rounded" />
+    <div class="flex flex-col gap-px leading-6">
+      <p class="opacity-80 text-xs leading-3">Robin's</p>
+      <p class="font-semibold text-sm">{deviceName}</p>
+      <div class="flex w-full items-center gap-1 mt-2">
+        <BatteryIcon battery={battery} />
+        <p class="font-bold text-lg">{battery}%</p>
+      </div>
+      <p class="leading-2.5 text-xs mt-2 animate-pulse">{charging ? "Charging" : ""}</p>
+    </div>
+  </div>
+</div>
+
+<style>
+  .device-slug {
+    min-height: 8.5rem;
+  }
+
+  .device-slug__image {
+    width: 6rem;
+    height: 6rem;
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 639px) {
+    .device-slug {
+      min-height: 7.5rem;
+      padding: 0.75rem;
+    }
+
+    .device-slug__body {
+      gap: 0.75rem;
+    }
+
+    .device-slug__image {
+      width: 4rem;
+      height: 4rem;
+    }
+  }
+</style>

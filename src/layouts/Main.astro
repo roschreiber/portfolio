@@ -1,6 +1,7 @@
 ---
 import background from '../assets/background.svg';
 import { Font } from "astro:assets";
+import '../styles/global.css';
 ---
 
 <!doctype html>
@@ -16,56 +17,13 @@ import { Font } from "astro:assets";
 		<Font cssVariable="--font-quicksand" />
 	</head>
 	<body>
-		<img id="background" src={background.src} alt="" fetchpriority="high" style="filter: grayscale(1) blur(5px);" />
-		<div class="page">
-			<div class="content">
+		<img src={background.src} alt="" fetchpriority="high" class="fixed inset-0 w-full h-full [z-index:-1]" style="filter: grayscale(1) blur(5px);" />
+		<div class="min-h-screen flex justify-center pt-[4.5rem] px-6 pb-24 box-border">
+			<div class="w-full max-w-[720px] relative">
 				<slot />
 			</div>
 		</div>
 	</body>
 </html>
 
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-		position: relative;
-	}
 
-	:global(p),
-	:global(h1),
-	:global(h2),
-	:global(h3),
-	:global(h4),
-	:global(h5),
-	:global(h6) {
-		font-family: var(--font-quicksand), sans-serif;
-	}
-
-	.page {
-		min-height: 100vh;
-		display: flex;
-		justify-content: center;
-		padding: 4.5rem 1.5rem 6rem;
-		box-sizing: border-box;
-	}
-
-	.content {
-		width: 100%;
-		max-width: 720px;
-		position: relative;
-	}
-
-	#background {
-		position: fixed;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		z-index: -1;
-	}
-
-
-</style>
