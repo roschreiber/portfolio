@@ -1,17 +1,112 @@
 ---
-import { SparklesIcon } from './animate-ui/SparklesIcon.tsx';
----
+import { SparklesIcon } from "./animate-ui/SparklesIcon.tsx";
+import ProjectSlug from "./sub/ProjectSlug.astro";
 
+type ProjectStatus = "In Progress" | "Completed";
+
+type ProjectEntry = {
+  title: string;
+  description: string;
+  tags: string[];
+  href: string;
+  status: ProjectStatus;
+};
+
+type ProjectYear = {
+  year: string;
+  projects: ProjectEntry[];
+};
+
+//year, title, desc, tags, href, status
+const projects: ProjectYear[] = [
+  {
+    year: "2026",
+    projects: [
+      {
+        title: "Project 1",
+        description: "testststs",
+        tags: ["1", "2", "3"],
+        href: "#",
+        status: "In Progress",
+      },
+      {
+        title: "Project 2",
+        description: "testststs",
+        tags: ["1123132", "2", "3"],
+        href: "#",
+        status: "In Progress",
+      },
+      {
+        title: "Project 2",
+        description: "testststs",
+        tags: ["1123132", "2", "3"],
+        href: "#",
+        status: "In Progress",
+      },
+      {
+        title: "Project 2",
+        description: "testststs",
+        tags: ["1123132", "2", "3"],
+        href: "#",
+        status: "In Progress",
+      },
+    ],
+  },
+  {
+    year: "2025",
+    projects: [
+      {
+        title: "Project 3",
+        description: "testststs",
+        tags: ["1", "2", "3"],
+        href: "#",
+        status: "In Progress",
+      },
+      {
+        title: "Project 4",
+        description: "testststs",
+        tags: ["1", "2", "3"],
+        href: "#",
+        status: "In Progress",
+      },
+    ],
+  },
+];
+---
 
 <div
   class="projects-card relative mx-auto w-full rounded-lg border-2 border-[#DCDCDC] bg-[#F7F7F6]/60 px-4 py-3 text-base font-medium"
 >
-    <div class="flex w-full items-center justify-between">
+  <div class="flex w-full items-center justify-between">
     <p class="flex items-center gap-1.5 text-xs leading-tight">
       <SparklesIcon client:load className="mb-0.2" /><span
         class="font-semibold -ml-px">things i've built</span
       >
     </p>
+  </div>
+    <div class="mt-3">
+    {
+        projects.map((row, rowIndex) => (
+        <div class="grid grid-cols-[64px_1fr] gap-4">
+          <div class="relative flex items-start gap-4">
+              <span class="mt-2.75 text-lg font-semibold leading-none opacity-80">{row.year}</span>
+
+              {rowIndex < projects.length - 1 && (
+                <div class="absolute left-14.5 top-5 -bottom-3 w-px rounded-full bg-linear-to-b from-black/25 via-black/14 to-black/8" />
+              )}
+              <div class="absolute left-13.75 top-4 size-2 rounded-full bg-black ring-4 ring-[#F7F7F6]/90" />
+          </div>
+
+        <div class="grid grid-cols-1 gap-4 mt-4 md:grid-cols-2 ">
+          {
+            row.projects.map((project) => (
+              <ProjectSlug {...project} />
+            ))
+          }
+        </div>
+        </div>
+      ))
+    }
   </div>
 </div>
 
