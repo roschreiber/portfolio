@@ -41,36 +41,42 @@ const discordID = import.meta.env.PUBLIC_DISCORD_ID;
       `https://api.lanyard.rest/v1/users/${discordID}`,
     ).then((res) => res.json());
     const spotifyData = response.data?.spotify;
+    const ciderData = response.data?.activities?.find(
+      (a) => a.application_id === "911790844204437504", //I sometimes listen to music on apple music aswell. Tracking Cider's (cider.sh) discord rich presence is the easiest way to implement apple music tracking.
+    );
 
-    const title = spotifyData?.song || "no song";
-    const artist = spotifyData?.artist || "no artist";
-    const album = spotifyData?.album || "no album";
-    const albumArt = spotifyData?.album_art_url || placeholderSrc;
-    const trackID = spotifyData?.track_id || null;
+    const title = spotifyData?.song ?? ciderData?.details ?? "no song";
+    const artist = spotifyData?.artist ?? ciderData?.state ?? "no artist";
+    const album = spotifyData?.album ?? ciderData?.assets?.large_text ?? "no album";
+    const albumArt =
+      spotifyData?.album_art_url ??
+      (ciderData?.assets?.large_image
+        ? `https://media.discordapp.net/${ciderData.assets.large_image.replace("mp:", "")}`
+        : placeholderSrc);
+    const trackUrl = spotifyData?.track_id
+      ? `https://open.spotify.com/track/${spotifyData.track_id}`
+      : ciderData?.details_url || null;
+    const source = spotifyData ? "spotify" : ciderData ? "apple music" : null;
 
     document.querySelector("#title").textContent = title;
     document.querySelector("#artist").textContent = artist;
     document.querySelector("#album").textContent = album;
     document.querySelector("#album-art").src = albumArt;
-    
+
     document.querySelector("#hrefSpotify").onclick = () => {
-    if (trackID) {
-        window.open(`https://open.spotify.com/track/${trackID}`, "_blank");
-      } else {
-        window.open(``, "_blank");
-      }
+      if (trackUrl) window.open(trackUrl, "_blank");
     };
 
-    if (!trackID) {
-      document.querySelector("#audio-icon").style.display = "none"; 
+    if (!source) {
+      document.querySelector("#audio-icon").style.display = "none";
       document.querySelector("#external-link-icon").style.display = "none";
       document.querySelector("#openSpotify").textContent = "";
-      document.querySelector("#nowListeningText").textContent = "not listening on spotify :(";
+      document.querySelector("#nowListeningText").textContent = "not listening rn :(";
     } else {
       document.querySelector("#audio-icon").style.display = "inline-block";
       document.querySelector("#external-link-icon").style.display = "inline-block";
-      document.querySelector("#openSpotify").textContent = "view on spotify";
-      document.querySelector("#nowListeningText").textContent = "now listening on spotify";
+      document.querySelector("#openSpotify").textContent = `view on ${source}`;
+      document.querySelector("#nowListeningText").textContent = `now listening on ${source}`;
     }
 
   }
