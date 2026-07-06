@@ -3,14 +3,16 @@ import { PlugZapIcon } from "./animate-ui/PlugZapIcon";
 import { LoaderIcon } from "./animate-ui/LoaderIcon";
 import DeviceSlug from "./sub/DeviceSlug.astro";
 
-const res = await fetch(new URL("/api/battery", Astro.url));
-const devices: {
+type Device = {
   deviceName: string;
   battery: number;
   charging: boolean;
   image: string;
   refresh: string;
-}[] = res.ok ? await res.json() : [];
+};
+
+const res = await fetch(new URL("/api/battery", Astro.url));
+const devices: Device[] = res.ok ? await res.json() : [];
 
 const lsRefresh = devices[0]?.refresh;
 const minutesAgo = lsRefresh
@@ -34,14 +36,7 @@ const minutesAgo = lsRefresh
   </div>
   <div class="devices-card__list mt-3">
     {
-      devices.map(
-        (device: {
-          deviceName: string;
-          battery: number;
-          charging: boolean;
-          image: string;
-          refresh: string;
-        }) => (
+      devices.map((device: Device) => (
           <DeviceSlug
             deviceName={device.deviceName}
             battery={device.battery}
@@ -49,8 +44,7 @@ const minutesAgo = lsRefresh
             image={device.image}
             refresh={device.refresh}
           />
-        ),
-      )
+        ))
     }
   </div>
 </div>

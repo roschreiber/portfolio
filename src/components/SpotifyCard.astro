@@ -4,6 +4,7 @@ import { AudioLinesIcon } from "./animate-ui/AudioLinesIcon";
 import { ExternalLinkIcon } from "./animate-ui/ExternalLinkIcon";
 
 const placeholderSrc = placeholder.src;
+const discordID = import.meta.env.PUBLIC_DISCORD_ID;
 ---
 
 <div
@@ -34,9 +35,8 @@ const placeholderSrc = placeholder.src;
   </div>
 </div>
 
-<script define:vars={{ placeholderSrc }}>
+<script define:vars={{ placeholderSrc, discordID }}>
   async function getSpotify() {
-    const discordID = "316991053242564609";
     const response = await fetch(
       `https://api.lanyard.rest/v1/users/${discordID}`,
     ).then((res) => res.json());

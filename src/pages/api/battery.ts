@@ -27,9 +27,11 @@ export const POST: APIRoute = async ({ request }) => {
 
         const { deviceName, battery, charging, image, password } = body;
         if (!deviceName || battery === null || charging === null || !password) {
+            console.log(request);
+            console.log(body);
             return new Response("Bad Request", { status: 400 });
         }
-        if (password !== "supersecrettest") {
+        if (password !== import.meta.env.BATTERY_KEY) {
             return new Response("Unauthorized", { status: 401 });
         }
 
