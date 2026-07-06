@@ -9,6 +9,7 @@ type ProjectEntry = {
   description: string;
   tags: string[];
   href: string;
+  githubURL: string;
   status: ProjectStatus;
 };
 
@@ -17,7 +18,7 @@ type ProjectYear = {
   projects: ProjectEntry[];
 };
 
-//year, title, desc, tags, href, status
+//year, title, desc, tags, href, githubURL, status
 const projects: ProjectYear[] = [
   {
     year: "2026",
@@ -27,6 +28,7 @@ const projects: ProjectYear[] = [
         description: "Minecraft Plugin for procedurally generating structures in the world",
         tags: ["Java"],
         href: "#",
+        githubURL: "https://github.com/roschreiber/OhTheDungeon-Redux",
         status: "In Progress",
 
       },
@@ -35,6 +37,7 @@ const projects: ProjectYear[] = [
         description: "testststs",
         tags: ["1123132", "2", "3"],
         href: "#",
+        githubURL: "",
         status: "In Progress",
 
       },
@@ -48,6 +51,7 @@ const projects: ProjectYear[] = [
         description: "A small little command line interface for interacting with webUntis, my school's timetable software",
         tags: ["JavaScript", "TUI", "oclif"],
         href: "#",
+        githubURL: "",
         status: "Completed",
       },
       {
@@ -55,6 +59,7 @@ const projects: ProjectYear[] = [
         description: "Stats Display for Bambu Lab Printers made in CircuitPython & for 64x32 RGB Matrix Displays",
         tags: ["CircuitPython", "Hardware"],
         href: "#",
+        githubURL: "",
         status: "In Progress",
       },
     ],
@@ -76,7 +81,7 @@ const projects: ProjectYear[] = [
     {
         projects.map((row, rowIndex) => (
         <div class="grid grid-cols-[64px_1fr] gap-4">
-          <div class="relative flex items-start gap-4">
+          <div class="relative flex items-start gap-4 mt-1.25">
               <span class="mt-2.75 text-lg font-semibold leading-none opacity-80">{row.year}</span>
 
               {rowIndex < projects.length - 1 && (
@@ -109,3 +114,32 @@ const projects: ProjectYear[] = [
     }
   }
 </style>
+
+<script>
+  async function loadGithubStats() {
+    const cards = document.querySelectorAll(".project-slug[data-github-url]");
+
+    for (const card of cards) {
+      const url = card.getAttribute("data-github-url");
+      if(!url) continue;
+
+      const [, owner, repo] = new URL(url).pathname.split("/");
+      if (!owner || !repo) continue;
+
+      try {
+        const res = await fetch(`https://api.github.com/repos/${owner}/${repo}`)
+        if(!res.ok) continue;
+        const data = await res.json();
+
+        const starsEl = card.querySelector(".gh-stars");
+        const forksEl = card.querySelector(".gh-forks");
+        if (starsEl) starsEl.textContent = data.stargazers_count;
+        if (forksEl) forksEl.textContent = data.forks_count;
+      } catch {
+
+      }
+    }
+  }
+
+  loadGithubStats();
+</script>
