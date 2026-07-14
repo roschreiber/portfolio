@@ -1,0 +1,45 @@
+---
+import Main from "../layouts/Main.astro";
+import Header from "../components/Header.astro";
+import BlogCard from "../components/BlogCard.astro";
+import Birthday from "../components/Birthday.astro";
+import Footer from "../components/Footer.astro";
+import InfoCard from "../components/InfoCard.astro";
+import ExcerptCard from "../components/ExcerptCard.astro";
+
+import { getCollection } from "astro:content";
+import AboutCard from "../components/AboutCard.astro";
+import PhotoCard from "../components/PhotoCard.astro";
+import SeriesCard from "../components/SeriesCard.astro";
+import ContactCard from "../components/ContactCard.astro";
+
+const posts = await getCollection("blog");
+---
+
+<Main>
+  <Birthday />
+  <p>
+    i'm trying to build cool stuff on the web. i'm still a beginner, but hope
+    that some of my projects are useful to others
+  </p>
+  <div class="relative left-1/2 w-screen max-w-none -translate-x-1/2 px-6 mt-6">
+    <div class="blog-cards mx-auto">
+      <div class="blog-card-main">
+        <AboutCard />
+      </div>
+      <div class="blog-card-main">
+        <PhotoCard />
+      </div>
+    </div>
+  </div>
+    <div class="relative left-1/2 w-screen max-w-none -translate-x-1/2 px-6 mt-4">
+    <div class="blog-cards mx-auto">
+      <div class="blog-card-main">
+        <SeriesCard />
+      </div>
+      <div class="blog-card-main">
+        <ContactCard />
+      </div>
+    </div>
+  </div>
+</Main>

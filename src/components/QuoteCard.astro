@@ -1,0 +1,51 @@
+---
+import { MessageCircleQuestionIcon } from "./animate-ui/MessageCircleQuestionIcon.tsx";
+
+import { Quote } from "@lucide/astro";
+
+async function getRandomQuote() {
+    const getQuoteFromKanye = Math.random() < 0.25;
+
+    if (getQuoteFromKanye) {
+      const response = await fetch("https://api.kanye.rest/");
+
+      const data = await response.json();
+
+      return {
+        quote: data.quote,
+        author: "Kanye West",
+      };
+    } else {
+      const response = await fetch("https://zenquotes.io/api/random");
+
+      const data = await response.json();
+
+      return {
+        quote: data[0].q,
+        author: data[0].a,
+      };
+    }
+  }
+
+  const randomQuote = await getRandomQuote();
+---
+
+<div
+  class="info-card relative w-full h-54.25 rounded-lg border-2 border-[#DCDCDC] bg-[#F7F7F6]/60 px-4 py-3 text-base font-medium"
+>
+  <div class="flex w-full items-center justify-between">
+    <p class="flex items-center text-xs gap-1.5 leading-tight">
+      <Quote class="size-3.5 -mb-0.5" /><span class="font-semibold -ml-px"
+        >random quote</span
+      >
+    </p>
+  </div>
+  <div class="grid grid-cols-1 gap-4 mt-3.5">
+    <p class="text-sm">
+      {randomQuote.quote}
+    </p>
+    <p class="text-sm font-bold italic mt-2 text-right">
+      — {randomQuote.author}
+    </p>
+  </div>
+</div>

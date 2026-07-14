@@ -1,0 +1,95 @@
+---
+import {
+  House,
+  FileText,
+  UserRound,
+  Send,
+} from "@lucide/astro";
+
+//label, href, icon
+const nav = [
+  {
+    label: "Home",
+    href: "/",
+    icon: House,
+  },
+  {
+    label: "Blog",
+    href: "/blog",
+    icon: FileText,
+  },
+  {
+    label: "About",
+    href: "/about",
+    icon: UserRound,
+  },
+  {
+    label: "Contact",
+    href: "/contact",
+    icon: Send,
+  },
+] as const;
+
+const currentPath = Astro.url.pathname.replace(/\/$/, "") || "/";
+
+const isActive = (href: string) => {
+  if (href == "/") {
+    return currentPath == "/";
+  } else {
+    return currentPath == href || currentPath.startsWith(`${href}/`);
+  }
+};
+---
+
+<div
+  class="projects-card relative mx-auto w-full rounded-lg border-2 border-[#DCDCDC] bg-[#F7F7F6]/60 px-4 py-3 text-base font-medium"
+>
+  <nav aria-label="Footer nav">
+    <ul class="dock-scroll flex w-full items-center">
+      {
+        nav.map((item) => {
+          const Icon = item.icon;
+          const active = isActive(item.href);
+          return (
+            <li class="flex-1">
+              <a
+                data-astro-prefetch
+                href={item.href}
+                aria-current={active ? "page" : undefined}
+                class:list={[
+                  "group flex h-10 items-center justify-center gap-2 mr-2 rounded-md px-4 text-[13px] font-medium transition-all duration-200",
+                  active
+                    ? "border-[#DCDCDC] border bg-[#F7F7F6]/60 text-[#181818] shadow-[0_5px_18px_rgba(0,0,0,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] ring-1 ring-black/5"
+                    : "text-[#666666] hover:bg-[#F7F7F6] hover:text-[#181818] hover:shadow-[0_5px_18px_rgba(0,0,0,0.06),inset_0_1px_0_rgba(255,255,255,0.9)] hover:ring-1 hover:ring-black/5",
+                ]}
+              >
+                <Icon size={17} stroke-width={2} absoluteStrokeWidth={true} class="mb-px -mr-0.5" />
+                <span>{item.label}</span>
+              </a>
+            </li>
+          );
+        })
+      }
+    </ul>
+  </nav>
+</div>
+
+<style>
+  .projects-card {
+    max-width: 100%;
+  }
+
+  @media (min-width: 1100px) {
+    .projects-card {
+      max-width: var(--portfolio-cards-max-width);
+    }
+  }
+
+  @media (max-width: 430px) {
+    .dock-scroll {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.5rem;
+    }
+  }
+</style>

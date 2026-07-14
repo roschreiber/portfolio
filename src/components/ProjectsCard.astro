@@ -77,7 +77,7 @@ const projects: ProjectYear[] = [
       >
     </p>
   </div>
-    <div class="mt-3">
+    <div>
     {
         projects.map((row, rowIndex) => (
         <div class="grid grid-cols-[64px_1fr] gap-4">
@@ -90,7 +90,7 @@ const projects: ProjectYear[] = [
               <div class="absolute left-13.75 top-4 size-2 rounded-full bg-black ring-4 ring-[#F7F7F6]/90" />
           </div>
 
-        <div class="grid grid-cols-1 gap-4 mt-4 md:grid-cols-2 ">
+        <div class="grid grid-cols-1 gap-4 mt-4 md:grid-cols-2 mb-2">
           {
             row.projects.map((project) => (
               <ProjectSlug {...project} />

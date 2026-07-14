@@ -18,6 +18,15 @@ const lsRefresh = devices[0]?.refresh;
 const minutesAgo = lsRefresh
   ? Math.floor((Date.now() - new Date(lsRefresh).getTime()) / 60000)
   : null;
+
+let refreshText = "";
+
+if (minutesAgo != null) {
+  refreshText = `last updated ${minutesAgo}m ago`;
+} else {
+  refreshText = `no device info right now`;
+}
+
 ---
 
 <div
@@ -30,7 +39,7 @@ const minutesAgo = lsRefresh
       >
     </p>
     <div class="flex items-center gap-1 opacity-80">
-      <p class="text-[10px] leading-tight">last updated {minutesAgo}m ago</p>
+      <p class="text-[10px] leading-tight">{refreshText}</p>
       <LoaderIcon className="opacity-80 w-3.5 h-3.5 mb-0.45" client:load />
     </div>
   </div>

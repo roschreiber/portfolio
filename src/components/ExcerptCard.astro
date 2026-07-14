@@ -1,0 +1,57 @@
+---
+import { Orbit } from "./animate-ui/OrbitIcon.tsx";
+
+import { ArrowRightIcon } from "./animate-ui/ArrowRightIcon.tsx";
+
+import { getCollection } from "astro:content";
+
+const posts = await getCollection("blog");
+
+const randomPost = posts[Math.floor(Math.random() * posts.length)];
+console.log(randomPost);
+
+let excerpt = randomPost.body?.split(/\r?\n\r?\n/).filter((paragraph) => {
+  return (
+    !paragraph.startsWith("#") && !paragraph.startsWith("```") && !paragraph.startsWith("![")
+  )
+})
+console.log(excerpt);
+
+let randomLine = excerpt?.[Math.floor(Math.random() * excerpt.length)];
+
+randomLine = randomLine?.replaceAll("**", "").replaceAll("*", "").replaceAll("`", "").replaceAll("~~", "");
+
+if(randomLine && randomLine.length > 150) {
+  randomLine = randomLine?.slice(0, 150) + "...";
+}
+
+---
+
+<div
+  class="info-card relative w-full min-h-54.25 rounded-lg border-2 border-[#DCDCDC] bg-[#F7F7F6]/60 px-4 py-3 text-base font-medium"
+>
+  <div class="flex w-full items-center justify-between">
+    <p class="flex items-center text-xs gap-1.5 leading-tight">
+      <Orbit client:load /><span class="font-semibold -ml-px"
+        >somewhere on the blog</span
+      >
+    </p>
+  </div>
+  <div class="grid grid-cols-1 gap-4 mt-3.5">
+    <p class="text-sm">a random excerpt to drop into:</p>
+    <div
+      class="info-card relative w-full rounded-lg border-2 border-[#DCDCDC] px-4 py-3 text-base font-medium"
+    >
+      <p class="-mt-0.75">{randomLine}</p>
+    </div>
+    <div class="flex items-center justify-between">
+      <p class="text-xs">from {randomPost.data.title}</p>
+      <a
+        href={`./blog/${randomPost.id}`}
+        class="group inline-flex items-center gap-1 text-xs font-semibold text-[#666666] transition-colors hover:text-[#181818]"
+      >
+        take me there <ArrowRightIcon client:load />
+      </a>
+    </div>
+  </div>
+</div>

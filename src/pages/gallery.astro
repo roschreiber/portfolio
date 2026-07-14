@@ -1,0 +1,79 @@
+---
+import Main from "../layouts/Main.astro";
+
+import { Camera } from "@lucide/astro";
+
+import { fetchPhotos } from "../lib/airtable.ts";
+
+import { ExternalLinkIcon } from "../components/animate-ui/ExternalLinkIcon.tsx";
+import { MapPinIcon } from "../components/animate-ui/MapPinIcon.tsx";
+import { ArrowLeftIcon } from "../components/animate-ui/ArrowLeftIcon.tsx";
+
+const allPhotos = await fetchPhotos();
+const photos = allPhotos.slice(0, 4); // get latest 4 photos
+---
+
+<Main>
+    <div>
+        <ArrowLeftIcon />
+        <p>back to about</p>
+    </div>
+
+    <div
+        class="blog-card relative w-full h-full rounded-lg border-2 border-[#DCDCDC] bg-[#F7F7F6]/60 px-4 py-3 text-base font-medium"
+    >
+        <div class="flex w-full items-center justify-between">
+            <p class="flex items-center gap-1 text-xs leading-tight">
+                <Camera size={16} class="mt-0.5" /><span class="font-semibold"
+                    >photography</span
+                >
+            </p>
+        </div>
+        <div class="grid grid-cols-1 gap-4 mt-1.5">
+            <p class="text-sm font-medium">some of the latest photos i took</p>
+        </div>
+        <div class="grid grid-cols-4 gap-4 mt-2">
+            {
+                photos.map((photo) => (
+                    <figure class="group flex flex-col gap-1.5">
+                        <div class="relative overflow-hidden rounded-lg aspect-3/4">
+                            <img
+                                src={photo.src}
+                                alt={photo.title}
+                                class="w-full h-full object-cover"
+                                loading="lazy"
+                            />
+                            {photo.cameraSettings && (
+                                <figcaption class="absolute inset-x-0 bottom-0 flex items-center gap-1 bg-black/70 px-2 py-1 text-sm leading-tight text-white translate-y-full transition-transform duration-200 group-hover:translate-y-0">
+                                    <Camera class="mb-0.5" />
+                                    <p class="ml-2 text-xs font-bold">
+                                        {photo.cameraSettings}
+                                    </p>
+                                </figcaption>
+                            )}
+                        </div>
+                        <div class="leading-tight">
+                            <p class="truncate text-xs font-bold">
+                                {photo.title}
+                            </p>
+                            <span class="flex items-center gap-1">
+                                <MapPinIcon client:load />
+                                <p class="truncate text-xs">{photo.location}</p>
+                            </span>
+                        </div>
+                    </figure>
+                ))
+            }
+        </div>
+        <hr class="mt-4 h-px border-0 bg-[#DCDCDC]" />
+        <div class="grid grid-cols-1 gap-4 mt-2 text-right">
+            <a
+                href="/gallery"
+                class="gallery-button flex items-center justify-end gap-1"
+            >
+                <p class="text-xs font-bold">open gallery</p>
+                <ExternalLinkIcon client:load />
+            </a>
+        </div>
+    </div>
+</Main>

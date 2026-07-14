@@ -1,0 +1,210 @@
+---
+import { MessageSquareMoreIcon } from "./animate-ui/MessageSquareMoreIcon.tsx";
+import BlogSlug from "./sub/BlogSlug.astro";
+import { getCollection } from "astro:content";
+import { ArrowRightIcon } from "./animate-ui/ArrowRightIcon.tsx";
+import { ArrowLeftIcon } from "./animate-ui/ArrowLeftIcon.tsx";
+
+const posts = (await getCollection("blog")).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+
+const postsPerPage = 2;
+
+const totalPages = Math.ceil(posts.length / postsPerPage);
+---
+
+<div
+  class="blog-card relative w-full h-full rounded-lg border-2 border-[#DCDCDC] bg-[#F7F7F6]/60 px-4 py-3 text-base font-medium"
+  data-blog-card
+  data-current-page="1"
+  data-total-pages={totalPages}
+>
+  <div class="flex w-full items-center justify-between">
+    <p class="flex items-center gap-1.5 text-xs leading-tight">
+      <MessageSquareMoreIcon client:load className="mb-0.2" /><span
+        class="font-semibold -ml-px">blog</span
+      >
+    </p>
+  </div>
+  <div class="grid grid-cols-1 gap-4 mt-4">
+    {
+      posts.map((post, index) => {
+        const page = Math.floor(index / postsPerPage) + 1;
+
+        return (
+          <div
+            data-blog-post
+            data-page={page}
+            class={page === 1 ? "" : "hidden"}
+          >
+            <BlogSlug
+              slug={post.id}
+              title={post.data.title}
+              description={post.data.description}
+              image={post.data.image}
+              tags={post.data.tags}
+              date={post.data.date}
+              readTime={post.data.readTime}
+            />
+          </div>
+        );
+      })
+    }
+  </div>
+
+  {
+    totalPages > 1 && (
+      <div class="mt-4 flex justify-center">
+        <button
+          type="button"
+          class:list={[
+            "page-prev group flex h-10 items-center justify-center rounded-md px-4 text-[13px] font-medium",
+            "text-[#666666] hover:bg-[#F7F7F6] hover:text-[#181818] hover:shadow-[0_5px_18px_rgba(0,0,0,0.06),inset_0_1px_0_rgba(255,255,255,0.9)] hover:ring-1 hover:ring-black/5",
+          ]}
+        >
+          <ArrowLeftIcon client:load />
+        </button>
+
+        {Array.from({ length: totalPages }, (_: undefined, index: number) => {
+          const page = index + 1; //index 0 -> 1
+
+          return (
+            <button
+              type="button"
+              class:list={[
+                "page-button group flex h-10 items-center justify-center gap-2 mr-2 rounded-md px-4 text-[13px] font-medium transition-all duration-200 ease",
+                page === 1
+                  ? "active-page"
+                  : "text-[#666666] hover:bg-[#F7F7F6] hover:text-[#181818] hover:shadow-[0_5px_18px_rgba(0,0,0,0.06),inset_0_1px_0_rgba(255,255,255,0.9)] hover:ring-1 hover:ring-black/5",
+              ]}
+              data-page-button={page}
+            >
+              {page}
+            </button>
+          );
+        })}
+
+        <button
+          type="button"
+          class:list={[
+            "page-next group flex h-10 items-center justify-center rounded-md px-4 text-[13px] font-medium transition-all duration-200",
+            "text-[#666666] hover:bg-[#F7F7F6] hover:text-[#181818] hover:shadow-[0_5px_18px_rgba(0,0,0,0.06),inset_0_1px_0_rgba(255,255,255,0.9)] hover:ring-1 hover:ring-black/5",
+          ]}
+        >
+          <ArrowRightIcon client:load />
+        </button>
+      </div>
+    )
+  }
+</div>
+
+<script>
+  const blogCards = document.querySelectorAll("[data-blog-card]");
+
+  blogCards.forEach((card) => {
+    const posts = card.querySelectorAll("[data-blog-post]");
+    const pageButtons = card.querySelectorAll(".page-button");
+    const prevButton = card.querySelector(".page-prev") as HTMLButtonElement;
+    const nextButton = card.querySelector(".page-next") as HTMLButtonElement;
+
+    const totalPages = Number(card.getAttribute("data-total-pages"));
+    let currentPage = 1;
+
+    function showPage(page: number) {
+      currentPage = page;
+      card.setAttribute("data-current-page", String(page));
+
+      posts.forEach((post) => {
+        const postPage = Number(post.getAttribute("data-page"));
+
+        if (postPage === page) {
+          post.classList.remove("hidden");
+        } else {
+          post.classList.add("hidden");
+        }
+
+        if (prevButton && nextButton instanceof HTMLButtonElement) {
+          if (page === 1) {
+            prevButton.disabled = true;
+          } else {
+            prevButton.disabled = false;
+          }
+
+          if (page === totalPages) {
+            nextButton.disabled = true;
+          } else {
+            nextButton.disabled = false;
+          }
+        }
+      });
+      pageButtons.forEach((button) => {
+        const bpage = Number(button.getAttribute("data-page-button"));
+        if (bpage === page) {
+          button.classList.add("active-page");
+        } else {
+          button.classList.remove("active-page");
+        }
+      });
+    }
+
+    pageButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const page = Number(button.getAttribute("data-page-button"));
+        showPage(page);
+      });
+    });
+
+    pageButtons.forEach((button) => {
+      const pButton = button as HTMLElement;
+      pButton.addEventListener("mouseenter", () => {
+        const rot = Math.random() * 50 - 25;
+        pButton.style.transform = `rotate(${rot}deg)`;
+      });
+
+      pButton.addEventListener("mouseleave", () => {
+        pButton.style.transform = `rotate(0deg)`;
+      });
+    });
+
+    prevButton.addEventListener("mouseenter", () => {
+      const icon = prevButton.querySelector("svg");
+      icon?.dispatchEvent(new PointerEvent("pointerenter"));
+    });
+
+    prevButton.addEventListener("mouseleave", () => {
+      const icon = prevButton.querySelector("svg");
+      icon?.dispatchEvent(new PointerEvent("pointerleave"));
+    });
+
+    nextButton.addEventListener("mouseenter", () => {
+      const icon = nextButton.querySelector("svg");
+      icon?.dispatchEvent(new PointerEvent("pointerenter"));
+    });
+
+    nextButton.addEventListener("mouseleave", () => {
+      const icon = nextButton.querySelector("svg");
+      icon?.dispatchEvent(new PointerEvent("pointerleave"));
+    });
+
+    prevButton.addEventListener("click", () => {
+      if (currentPage > 1) {
+        showPage(currentPage - 1);
+      }
+    });
+
+    nextButton.addEventListener("click", () => {
+      if (currentPage < totalPages) {
+        showPage(currentPage + 1);
+      }
+    });
+  });
+</script>
+
+<style>
+  @reference "tailwindcss";
+
+  .active-page {
+    @apply border-[#DCDCDC] border bg-[#F7F7F6]/60 text-[#181818] shadow-[0_5px_18px_rgba(0,0,0,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] ring-1 ring-black/5;
+  }
+</style>

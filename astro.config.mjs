@@ -5,17 +5,23 @@ import tailwindcss from "@tailwindcss/vite";
 import react from "@astrojs/react";
 import node from "@astrojs/node";
 
+import { satteri } from '@astrojs/markdown-satteri';
+
 // https://astro.build/config
 export default defineConfig({
   adapter: node({ mode: "standalone" }),
 
-  experimental: {
-    rustCompiler: true,
-  },
-
   vite: {
     plugins: [tailwindcss()],
   },
+
+  markdown: {
+    processor: satteri({
+      features: { directive: true },
+    }),
+  },
+
+  prefetch: true,
 
   fonts: [
     {

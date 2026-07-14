@@ -1,0 +1,23 @@
+---
+import { MessageCircleQuestionIcon } from "./animate-ui/MessageCircleQuestionIcon.tsx";
+---
+
+<div
+    class="info-card relative w-full h-54.25 rounded-lg border-2 border-[#DCDCDC] bg-[#F7F7F6]/60 px-4 py-3 text-base font-medium"
+>
+    <div class="flex w-full items-center justify-between">
+        <p class="flex items-center text-xs gap-1.5 leading-tight">
+            <MessageCircleQuestionIcon client:load className="mb-0.2" /><span
+                class="font-semibold -ml-px">info</span
+            >
+        </p>
+    </div>
+    <div class="grid grid-cols-1 gap-4 mt-3.5">
+        <p id="artist" class="text-sm">
+            This blog is mainly for documenting what I build and what I learned
+            while doing so. Every now and then, there might also be something
+            more personal like thoughts, updates or other things that I just
+            want to tell the world!
+        </p>
+    </div>
+</div>

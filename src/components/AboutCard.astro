@@ -1,0 +1,39 @@
+---
+import { UserIcon } from "./animate-ui/UserIcon.tsx";
+import { ArrowLeftIcon } from "./animate-ui/ArrowLeftIcon.tsx";
+---
+
+<div
+    class="blog-card relative w-full h-full rounded-lg border-2 border-[#DCDCDC] bg-[#F7F7F6]/60 px-4 py-3 text-base font-medium"
+>
+    <div class="flex w-full items-center justify-between">
+        <p class="flex items-center gap-1 text-xs leading-tight">
+            <UserIcon client:load className="mb-0.2" /><span
+                class="font-semibold">about me</span
+            >
+        </p>
+    </div>
+    <div class="grid grid-cols-1 gap-4 mt-2">
+        <p class="text-sm font-medium">
+            hey! i'm rob, a student from germany who just likes building stuff!
+            this site is where i share the things i build, the things i learn
+            and the things that i found interesting along the way!
+        </p>
+        <p class="text-sm font-medium">
+            other than that, some of my other hobbies are listening to music,
+            working out, going for a jog or watching series / anime.
+        </p>
+        <p class="text-sm font-medium">
+            i'm still figuring things out, but i enjoy the process of turning
+            small ideas into real projects and would love to have this as my
+            career in the future!
+        </p>
+        <a title="Heatmap stats through hackatime">
+            <img
+                alt="Hackatime activity heatmap"
+                src="https://heatmap.shymike.dev?id=816&timezone=Europe%2FBerlin&labels=true&theme=light&rounding=30"
+                class="w-full rounded-lg grayscale"
+            />
+        </a>
+    </div>
+</div>

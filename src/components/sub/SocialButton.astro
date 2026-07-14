@@ -1,0 +1,70 @@
+---
+type Props = {
+    icon: string;
+    service: string;
+    href?: string;
+    txt: string;
+};
+
+const { icon, service, href, txt } = Astro.props;
+
+const isExternal = href?.startsWith("http") || href?.startsWith("https");
+
+import { ExternalLinkIcon } from "../animate-ui/ExternalLinkIcon.tsx";
+---
+
+<a
+    href={href}
+    target={isExternal ? "_blank" : undefined}
+    ;
+    rel={isExternal ? "noopener norefferer" : undefined}
+    ;
+    aria-label={`Go to ${service}`}
+    class="social-button group grid grid-cols-[1.5rem_6rem_1fr_1.25rem] min-h-10 w-full items-center gap-2 rounded-lg border border-[#DCDCDC] bg-[#F7F7F6]/60 px-3 py-2 text-black no-underline"
+>
+    <span
+        class="social-icon flex size-6 items-center justify-center"
+        aria-hidden="true"
+        set:html={icon}
+    />
+
+    <span class="text-xs ml-2 font-bold">
+        {service}
+    </span>
+
+    <span class="truncate text-xs font-light">
+        {txt}
+    </span>
+
+    <span class="link-icon">
+        <ExternalLinkIcon client:load />
+    </span>
+</a>
+
+<style>
+    .social-icon :global(svg) {
+        width: 100%;
+        height: 100%;
+        display: block;
+    }
+
+    @media (max-width: 430px) {
+        .social-button {
+            grid-template-columns: 1.5rem 6rem 1fr 1.25rem;
+        }
+    }
+</style>
+
+<script>
+    document.querySelectorAll(".social-button").forEach((button) => {
+        button.addEventListener("mouseenter", () => {
+            const icon = button.querySelector(".link-icon svg");
+            icon?.dispatchEvent(new PointerEvent("pointerenter"));
+        });
+
+        button.addEventListener("mouseleave", () => {
+            const icon = button.querySelector(".link-icon svg");
+            icon?.dispatchEvent(new PointerEvent("pointerleave"));
+        });
+    });
+</script>
