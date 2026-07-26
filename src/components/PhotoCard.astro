@@ -45,10 +45,10 @@ const photos = allPhotos.slice(0, 4); // get latest 4 photos
                     </div>
                     <div class="leading-tight">
                         <p class="truncate text-xs font-bold">{photo.title}</p>
-                        <span class="flex items-center gap-1">
+                        <div class="flex items-center gap-1">
                             <MapPinIcon client:load />
                             <p class="truncate text-xs">{photo.location}</p>
-                        </span>
+                        </div>
                     </div>
                 </figure>
             ))

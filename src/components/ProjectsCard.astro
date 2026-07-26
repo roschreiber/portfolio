@@ -5,141 +5,145 @@ import ProjectSlug from "./sub/ProjectSlug.astro";
 type ProjectStatus = "In Progress" | "Completed";
 
 type ProjectEntry = {
-  title: string;
-  description: string;
-  tags: string[];
-  href: string;
-  githubURL: string;
-  status: ProjectStatus;
+    title: string;
+    description: string;
+    tags: string[];
+    href: string;
+    githubURL: string;
+    status: ProjectStatus;
 };
 
 type ProjectYear = {
-  year: string;
-  projects: ProjectEntry[];
+    year: string;
+    projects: ProjectEntry[];
 };
 
 //year, title, desc, tags, href, githubURL, status
 const projects: ProjectYear[] = [
-  {
-    year: "2026",
-    projects: [
-      {
-        title: "OTD-Redux",
-        description: "Minecraft Plugin for procedurally generating structures in the world",
-        tags: ["Java"],
-        href: "#",
-        githubURL: "https://github.com/roschreiber/OhTheDungeon-Redux",
-        status: "In Progress",
-
-      },
-      {
-        title: "Project 2",
-        description: "testststs",
-        tags: ["1123132", "2", "3"],
-        href: "#",
-        githubURL: "",
-        status: "In Progress",
-
-      },
-    ],
-  },
-  {
-    year: "2025",
-    projects: [
-      {
-        title: "webUntis-CLI",
-        description: "A small little command line interface for interacting with webUntis, my school's timetable software",
-        tags: ["JavaScript", "TUI", "oclif"],
-        href: "#",
-        githubURL: "",
-        status: "Completed",
-      },
-      {
-        title: "BambuLab-Neon",
-        description: "Stats Display for Bambu Lab Printers made in CircuitPython & for 64x32 RGB Matrix Displays",
-        tags: ["CircuitPython", "Hardware"],
-        href: "#",
-        githubURL: "",
-        status: "In Progress",
-      },
-    ],
-  },
+    {
+        year: "2026",
+        projects: [
+            {
+                title: "OTD-Redux",
+                description:
+                    "Minecraft Plugin for procedurally generating structures in the world",
+                tags: ["Java"],
+                href: "#",
+                githubURL: "https://github.com/roschreiber/OhTheDungeon-Redux",
+                status: "In Progress",
+            },
+            {
+                title: "portfolio",
+                description:
+                    "the website that you're on right now! fully open-source for you to make it your own.",
+                tags: ["Astro", "TypeSript"],
+                href: "#",
+                githubURL: "https://github.com/roschreiber/portfolio",
+                status: "Completed",
+            },
+        ],
+    },
+    {
+        year: "2025",
+        projects: [
+            {
+                title: "webUntis-CLI",
+                description:
+                    "A small little command line interface for interacting with webUntis, my school's timetable software",
+                tags: ["JavaScript", "TUI", "oclif"],
+                href: "#",
+                githubURL: "https://github.com/roschreiber/webuntis-cli",
+                status: "Completed",
+            },
+            {
+                title: "BambuLab-Neon",
+                description:
+                    "Stats Display for Bambu Lab Printers made in CircuitPython & for 64x32 RGB Matrix Displays",
+                tags: ["CircuitPython", "Hardware"],
+                href: "https://github.com/roschreiber/bambulab-neon",
+                githubURL: "https://github.com/roschreiber/bambulab-neon",
+                status: "Completed",
+            },
+        ],
+    },
 ];
 ---
 
 <div
-  class="projects-card relative mx-auto w-full rounded-lg border-2 border-[#DCDCDC] bg-[#F7F7F6]/60 px-4 py-3 text-base font-medium"
+    class="projects-card relative mx-auto w-full rounded-lg border-2 border-[#DCDCDC] bg-[#F7F7F6]/60 px-4 py-3 text-base font-medium"
 >
-  <div class="flex w-full items-center justify-between">
-    <p class="flex items-center gap-1.5 text-xs leading-tight">
-      <SparklesIcon client:load className="mb-0.2" /><span
-        class="font-semibold -ml-px">things i've built</span
-      >
-    </p>
-  </div>
+    <div class="flex w-full items-center justify-between">
+        <p class="flex items-center gap-1.5 text-xs leading-tight">
+            <SparklesIcon client:load className="mb-0.2" /><span
+                class="font-semibold -ml-px">things i've built</span
+            >
+        </p>
+    </div>
     <div>
-    {
-        projects.map((row, rowIndex) => (
-        <div class="grid grid-cols-[64px_1fr] gap-4">
-          <div class="relative flex items-start gap-4 mt-1.25">
-              <span class="mt-2.75 text-lg font-semibold leading-none opacity-80">{row.year}</span>
+        {
+            projects.map((row, rowIndex) => (
+                <div class="grid grid-cols-[64px_1fr] gap-4">
+                    <div class="relative flex items-start gap-4 mt-1.25">
+                        <span class="mt-2.75 text-lg font-semibold leading-none opacity-80">
+                            {row.year}
+                        </span>
 
-              {rowIndex < projects.length - 1 && (
-                <div class="absolute left-14.5 top-5 -bottom-3 w-px rounded-full bg-linear-to-b from-black/25 via-black/14 to-black/8" />
-              )}
-              <div class="absolute left-13.75 top-4 size-2 rounded-full bg-black ring-4 ring-[#F7F7F6]/90" />
-          </div>
+                        {rowIndex < projects.length - 1 && (
+                            <div class="absolute left-14.5 top-5 -bottom-3 w-px rounded-full bg-linear-to-b from-black/25 via-black/14 to-black/8" />
+                        )}
+                        <div class="absolute left-13.75 top-4 size-2 rounded-full bg-black ring-4 ring-[#F7F7F6]/90" />
+                    </div>
 
-        <div class="grid grid-cols-1 gap-4 mt-4 md:grid-cols-2 mb-2">
-          {
-            row.projects.map((project) => (
-              <ProjectSlug {...project} />
+                    <div class="grid grid-cols-1 gap-4 mt-4 md:grid-cols-2 mb-2">
+                        {row.projects.map((project) => (
+                            <ProjectSlug {...project} />
+                        ))}
+                    </div>
+                </div>
             ))
-          }
-        </div>
-        </div>
-      ))
-    }
-  </div>
+        }
+    </div>
 </div>
 
 <style>
-  .projects-card {
-    max-width: 100%;
-  }
-
-  @media (min-width: 1100px) {
     .projects-card {
-      max-width: var(--portfolio-cards-max-width);
+        max-width: 100%;
     }
-  }
+
+    @media (min-width: 1100px) {
+        .projects-card {
+            max-width: var(--portfolio-cards-max-width);
+        }
+    }
 </style>
 
 <script>
-  async function loadGithubStats() {
-    const cards = document.querySelectorAll(".project-slug[data-github-url]");
+    async function loadGithubStats() {
+        const cards = document.querySelectorAll(
+            ".project-slug[data-github-url]",
+        );
 
-    for (const card of cards) {
-      const url = card.getAttribute("data-github-url");
-      if(!url) continue;
+        for (const card of cards) {
+            const url = card.getAttribute("data-github-url");
+            if (!url) continue;
 
-      const [, owner, repo] = new URL(url).pathname.split("/");
-      if (!owner || !repo) continue;
+            const [, owner, repo] = new URL(url).pathname.split("/");
+            if (!owner || !repo) continue;
 
-      try {
-        const res = await fetch(`https://api.github.com/repos/${owner}/${repo}`)
-        if(!res.ok) continue;
-        const data = await res.json();
+            try {
+                const res = await fetch(
+                    `https://api.github.com/repos/${owner}/${repo}`,
+                );
+                if (!res.ok) continue;
+                const data = await res.json();
 
-        const starsEl = card.querySelector(".gh-stars");
-        const forksEl = card.querySelector(".gh-forks");
-        if (starsEl) starsEl.textContent = data.stargazers_count;
-        if (forksEl) forksEl.textContent = data.forks_count;
-      } catch {
-
-      }
+                const starsEl = card.querySelector(".gh-stars");
+                const forksEl = card.querySelector(".gh-forks");
+                if (starsEl) starsEl.textContent = data.stargazers_count;
+                if (forksEl) forksEl.textContent = data.forks_count;
+            } catch {}
+        }
     }
-  }
 
-  loadGithubStats();
+    loadGithubStats();
 </script>

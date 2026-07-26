@@ -9,70 +9,82 @@ import { ExternalLinkIcon } from "../components/animate-ui/ExternalLinkIcon.tsx"
 import { MapPinIcon } from "../components/animate-ui/MapPinIcon.tsx";
 import { ArrowLeftIcon } from "../components/animate-ui/ArrowLeftIcon.tsx";
 
+import Birthday from "../components/Birthday.astro";
+
 const allPhotos = await fetchPhotos();
 ---
 
 <Main>
-    <div>
-        <ArrowLeftIcon />
-        <p>back to about</p>
-    </div>
-
+    <Birthday />
+    <p>
+        i'm trying to build cool stuff on the web. i'm still a beginner, but
+        hope that some of my projects are useful to others
+    </p>
     <div
-        class="blog-card relative w-full h-full rounded-lg border-2 border-[#DCDCDC] bg-[#F7F7F6]/60 px-4 py-3 text-base font-medium"
+        class="relative left-1/2 w-screen max-w-none -translate-x-1/2 px-6 mt-2"
     >
-        <div class="flex w-full items-center justify-between">
-            <p class="flex items-center gap-1 text-xs leading-tight">
-                <Camera size={16} class="mt-0.5" /><span class="font-semibold"
-                    >photography</span
-                >
-            </p>
-        </div>
-        <div class="grid grid-cols-1 gap-4 mt-1.5">
-            <p class="text-sm font-medium">some of the latest photos i took</p>
-        </div>
-        <div class="grid grid-cols-4 gap-4 mt-2">
-            {
-                allPhotos.map((photo) => (
-                    <figure class="group flex flex-col gap-1.5">
-                        <div class="relative overflow-hidden rounded-lg aspect-3/4">
-                            <img
-                                src={photo.src}
-                                alt={photo.title}
-                                class="w-full h-full object-cover"
-                                loading="lazy"
-                            />
-                            {photo.cameraSettings && (
-                                <figcaption class="absolute inset-x-0 bottom-0 flex items-center gap-1 bg-black/70 px-2 py-1 text-sm leading-tight text-white translate-y-full transition-transform duration-200 group-hover:translate-y-0">
-                                    <Camera class="mb-0.5" />
-                                    <p class="ml-2 text-xs font-bold">
-                                        {photo.cameraSettings}
+        <a href="./about" class="flex w-336 max-w-full mx-auto">
+            <div class="mt-2 flex items-center gap-1">
+                <ArrowLeftIcon client:load size={12} />
+                <p class="text-xs ml-1">back to about</p>
+            </div>
+        </a>
+        <div
+            class="relative mx-auto mt-2 w-336 max-w-full h-full rounded-lg border-2 border-[#DCDCDC] bg-[#F7F7F6]/60 px-4 py-3 text-base font-medium"
+        >
+            <div class="grid grid-cols-4 gap-4 mt-2 transform 200ms ease">
+                {
+                    allPhotos.map((photo) => (
+                        <figure class="group flex flex-col gap-1.5">
+                            <div class="relative overflow-hidden rounded-lg aspect-3/4">
+                                <img
+                                    src={photo.src}
+                                    alt={photo.title}
+                                    class="photoElement w-full h-full object-cover"
+                                    loading="lazy"
+                                    id="galPhoto"
+                                />
+                                {photo.cameraSettings && (
+                                    <figcaption class="absolute inset-x-0 bottom-0 flex items-center gap-1 bg-black/70 px-2 py-1 text-sm leading-tight text-white translate-y-full transition-transform duration-200 group-hover:translate-y-0">
+                                        <Camera size={16} class="mb-px" />
+                                        <p class="ml-1 text-xs font-bold">
+                                            {photo.cameraSettings}
+                                        </p>
+                                    </figcaption>
+                                )}
+                            </div>
+                            <div class="leading-tight">
+                                <p class="truncate text-xs font-bold">
+                                    {photo.title}
+                                </p>
+                                <span class="flex items-center gap-1">
+                                    <MapPinIcon client:load />
+                                    <p class="truncate text-xs">
+                                        {photo.location}
                                     </p>
-                                </figcaption>
-                            )}
-                        </div>
-                        <div class="leading-tight">
-                            <p class="truncate text-xs font-bold">
-                                {photo.title}
-                            </p>
-                            <span class="flex items-center gap-1">
-                                <MapPinIcon client:load />
-                                <p class="truncate text-xs">{photo.location}</p>
-                            </span>
-                        </div>
-                    </figure>
-                ))
-            }
-        </div>
-        <hr class="mt-4 h-px border-0 bg-[#DCDCDC]" />
-        <div class="grid grid-cols-1 gap-4 mt-2 text-right">
-            <a
-                href="/gallery"
-                class="gallery-button flex items-center justify-end gap-1"
-            >
-                <p class="text-xs font-bold">open gallery</p>
-                <ExternalLinkIcon client:load />
-            </a>
+                                </span>
+                            </div>
+                        </figure>
+                    ))
+                }
+            </div>
         </div>
     </div>
 </Main>
+
+<script>
+    const galPhotos = document.querySelectorAll(".photoElement");
+
+    galPhotos.forEach((photo) => {
+        const container = photo.parentElement;
+
+        container?.addEventListener("mouseenter", () => {
+            const rot = Math.random() * 10 - 5;
+            container.style.transform = `rotate(${rot}deg)`;
+        });
+
+        container?.addEventListener("mouseleave", () => {
+            container.style.transform = `rotate(0deg)`;
+        });
+    });
+</script>
