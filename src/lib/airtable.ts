@@ -17,20 +17,108 @@ interface Photo {
   filePath: string;
 }
 
+interface Series {
+  title: string;
+  rating: string;
+  type: string;
+  notes: string;
+  dateWatched: string;
+  src: string;
+  filePath: string;
+}
+
 let cachedPhotos: Photo[] = [];
-let lastFetch = 0;
-let isFetching = false;
+let photosLastFetch = 0;
+let isFetchingPhotos = false;
+
+let cachedSeries: Series[] = [];
+let seriesLastFetch = 0;
+let isFetchingSeries = false;
+
+export async function fetchSeries() {
+  const THREE_HOURS = 3 * 60 * 60 * 1000;
+  const oldCache = Date.now() - seriesLastFetch > THREE_HOURS;
+  const emptyCache = cachedSeries.length === 0;
+
+  if (!isFetchingSeries && (oldCache || emptyCache)) {
+    isFetchingSeries = true;
+    if (!TOKEN || !BASE_ID || !STABLE) {
+      console.error("Couldn't fetch from Airtable due to environment variables missing")
+      isFetchingSeries = false;
+      return [];
+    } else {
+      const params = new URLSearchParams();
+      params.append("sort[0][field]", "Date Watched");
+      params.append("sort[0][direction]", "desc");
+
+      const baseURL = `https://api.airtable.com/v0/${BASE_ID}/${STABLE}`;
+      const url = `${baseURL}?${params.toString()}`;
+
+      const response = await fetch(url, {
+        headers: {
+          "Authorization": `Bearer ${TOKEN}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch photos from Airtable: " + response.status);
+      }
+
+      const data = await response.json();
+
+      fs.mkdirSync(OUT, { recursive: true });
+      const series: Series[] = [];
+
+      for (const record of data.records) {
+        const fields = record.fields;
+        const attachments = fields["Cover"];
+
+        const cover = attachments[0];
+
+        const fileName = cover.filename;
+        const filePath = path.join(OUT, fileName);
+
+        if (!fs.existsSync(filePath)) {
+          const image = await fetch(cover.url);
+          const buffer = await image.arrayBuffer();
+          fs.writeFileSync(filePath, Buffer.from(buffer));
+        }
+
+        series.push({
+          title: fields["Title"],
+          rating: fields["Star Rating"],
+          type: fields["Type"],
+          notes: fields["Review Notes"],
+          dateWatched: fields["Date Watched"],
+          src: "/series/" + fileName,
+          filePath: filePath
+        });
+      }
+
+      cachedSeries = series;
+      seriesLastFetch = Date.now();
+      isFetchingSeries = false;
+      return series;
+
+    }
+
+  }
+
+  return cachedSeries;
+  console.log(cachedSeries);
+
+}
 
 export async function fetchPhotos() {
   const THREE_HOURS = 3 * 60 * 60 * 1000;
-  const oldCache = Date.now() - lastFetch > THREE_HOURS;
+  const oldCache = Date.now() - photosLastFetch > THREE_HOURS;
   const emptyCache = cachedPhotos.length === 0;
 
-  if (!isFetching && (oldCache || emptyCache)) {
-    isFetching = true;
+  if (!isFetchingPhotos && (oldCache || emptyCache)) {
+    isFetchingPhotos = true;
     if (!TOKEN || !BASE_ID || !PTABLE) {
       console.error("Couldn't fetch from Airtable due to environment variables missing")
-      isFetching = false;
+      isFetchingPhotos = false;
       return [];
     } else {
       const params = new URLSearchParams();
@@ -82,8 +170,8 @@ export async function fetchPhotos() {
       }
 
       cachedPhotos = photos;
-      lastFetch = Date.now();
-      isFetching = false;
+      photosLastFetch = Date.now();
+      isFetchingPhotos = false;
       return photos;
 
     }

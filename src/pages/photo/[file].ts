@@ -21,5 +21,5 @@ export const GET: APIRoute = async ({ params }) => {
   if (ext === ".png") type = "image/png";
   if (ext === ".webp") type = "image/webp";
 
-  return new Response(file, { status: 200, headers: { "Content-Type": type, "Cache-Control": "public, max-age=86400" } });
+  return new Response(new Uint8Array(file), { status: 200, headers: { "Content-Type": type, "Cache-Control": "public, max-age=86400" } });
 };

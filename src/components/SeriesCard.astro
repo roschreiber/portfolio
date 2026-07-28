@@ -1,5 +1,10 @@
 ---
 import { Clapperboard } from '@lucide/astro'
+
+import { fetchSeries } from "../lib/airtable.ts";
+
+const allSeries = await fetchSeries();
+const series = allSeries.slice(0, 4); // get latest 4 series watched
 ---
 
 <div
@@ -12,8 +17,37 @@ import { Clapperboard } from '@lucide/astro'
       >
     </p>
   </div>
-  <div class="grid grid-cols-1 gap-4 mt-2">
-    asdasd
-  </div>
+  <div class="grid grid-cols-1 gap-4 mt-1.5">
+        <p class="text-sm font-medium">some of the latest photos i took</p>
+    </div>
+    <div class="grid grid-cols-4 gap-4 mt-2">
+        {
+            series.map((serie) => (
+                <figure class="group flex flex-col gap-1.5">
+                    <div class="relative overflow-hidden rounded-lg aspect-3/4">
+                        <img
+                            src={serie.src}
+                            alt={serie.title}
+                            class="w-full h-full object-cover"
+                            loading="lazy"
+                        />
+                        {serie.notes && (
+                            <figcaption class="absolute inset-x-0 bottom-0 flex items-center gap-1 bg-black/70 px-2 py-1 text-sm leading-tight text-white translate-y-full transition-transform duration-200 group-hover:translate-y-0">
+                                <p class="ml-2 text-xs font-bold">
+                                    {serie.notes}
+                                </p>
+                            </figcaption>
+                        )}
+                    </div>
+                    <div class="leading-tight">
+                        <p class="truncate text-xs font-bold">{serie.title}</p>
+                        <div class="flex items-center gap-1">
+                            <p class="truncate text-xs">{serie.rating}</p>
+                        </div>
+                    </div>
+                </figure>
+            ))
+        }
+    </div>
 </div>
 
