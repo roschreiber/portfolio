@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "@fontsource-variable/geist";
+@plugin "@tailwindcss/typography";
 
 html,
 body {
@@ -96,4 +97,57 @@ h6 {
     flex: 0 1 50%;
     max-width: 50%;
   }
+}
+
+.blog-prose {
+  --tw-prose-body: oklch(0.145 0 0 / 0.8);
+  --tw-prose-headings: oklch(0.145 0 0);
+  --tw-prose-lead: oklch(0.145 0 0 / 0.7);
+  --tw-prose-links: oklch(0.145 0 0);
+  --tw-prose-bold: oklch(0.145 0 0);
+  --tw-prose-counters: oklch(0.145 0 0 / 0.5);
+  --tw-prose-bullets: oklch(0.145 0 0 / 0.3);
+  --tw-prose-hr: #dcdcdc;
+  --tw-prose-quotes: oklch(0.145 0 0 / 0.8);
+  --tw-prose-quote-borders: #dcdcdc;
+  --tw-prose-captions: oklch(0.145 0 0 / 0.5);
+  --tw-prose-code: oklch(0.145 0 0);
+  --tw-prose-pre-code: oklch(0.145 0 0);
+  --tw-prose-pre-bg: #f7f7f6;
+  --tw-prose-th-borders: #dcdcdc;
+  --tw-prose-td-borders: #dcdcdc;
+  max-width: none;
+}
+
+.blog-prose :where(a):not(:where([class~="not-prose"] *)) {
+  font-weight: 500;
+  text-decoration: none;
+  border-bottom: 1px solid #dcdcdc;
+}
+
+.blog-prose :where(a):not(:where([class~="not-prose"] *)):hover {
+  border-bottom-color: currentColor;
+}
+
+.blog-prose :where(code):not(:where([class~="not-prose"] *))::before,
+.blog-prose :where(code):not(:where([class~="not-prose"] *))::after {
+  content: none;
+}
+
+.blog-prose :where(code):not(pre code):not(:where([class~="not-prose"] *)) {
+  background-color: #f7f7f6;
+  border: 1px solid #dcdcdc;
+  border-radius: 0.375rem;
+  padding: 0.15em 0.4em;
+  font-weight: 500;
+}
+
+.blog-prose pre {
+  border: 1px solid #dcdcdc;
+  border-radius: 0.5rem;
+}
+
+.blog-prose img {
+  border: 2px solid #dcdcdc;
+  border-radius: 0.5rem;
 }
