@@ -15,7 +15,7 @@ export async function getStaticPaths() {
 }
 
 const { post } = Astro.props;
-const { Content } = await render(post);
+const { Content, headings } = await render(post);
 ---
 
 <Main>
@@ -24,12 +24,14 @@ const { Content } = await render(post);
         i'm trying to build cool stuff on the web. i'm still a beginner, but
         hope that some of my projects are useful to others
     </p>
-    <a href="./blog" class="flex w-336 max-w-full mx-auto">
+    <a href="./" class="flex w-336 max-w-full mx-auto">
         <div class="mt-6 flex items-center gap-1">
             <ArrowLeftIcon client:load size={12} />
             <p class="text-xs ml-1">back to blog overview</p>
         </div>
     </a>
+    <div class="mt-2 grid items-start gap-3">
+    <article>
     <div
         class="blog-txt-card relative w-full rounded-lg border-2 border-[#DCDCDC] bg-[#F7F7F6]/60 mt-2 px-4 py-3 text-base font-medium"
     >
@@ -45,5 +47,32 @@ const { Content } = await render(post);
         <div class="mt-4">
             <Content />
         </div>
+        </div>
+    </article>
+
+    {
+        headings.length > 0 && (
+            <aside>
+                <p>
+                    on this page
+                </p>
+
+                <nav>
+                    <ul class="flex flex-col gap-1">
+                        {
+                            headings.map((heading) => {
+                                <li>
+                                    <a href="{`#${heading.slug`}">
+                                        {heading.text}
+                                    </a>
+                                </li>
+                            })
+                        }
+                    </ul>
+                </nav>
+            </aside>
+        )
+    }
     </div>
+
 </Main>

@@ -11,7 +11,7 @@ import { getCollection } from "astro:content";
 import AboutCard from "../components/AboutCard.astro";
 import PhotoCard from "../components/PhotoCard.astro";
 import SeriesCard from "../components/SeriesCard.astro";
-import ContactCard from "../components/ContactCard.astro";
+import TodayStatsCard from "../components/TodayStatsCard.astro";
 
 const posts = await getCollection("blog");
 ---
@@ -38,7 +38,7 @@ const posts = await getCollection("blog");
         <SeriesCard />
       </div>
       <div class="blog-card-main">
-        <ContactCard />
+        <TodayStatsCard />
       </div>
     </div>
   </div>

@@ -11,8 +11,12 @@ type Device = {
   refresh: string;
 };
 
-const res = await fetch(new URL("/api/battery", Astro.url));
-const devices: Device[] = res.ok ? await res.json() : [];
+let devices: Device[] = [];
+try {
+  const res = await fetch(new URL("/api/battery", Astro.url));
+  if (res.ok) devices = await res.json();
+} catch {
+}
 
 const lsRefresh = devices[0]?.refresh;
 const minutesAgo = lsRefresh

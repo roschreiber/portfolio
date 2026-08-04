@@ -1,6 +1,8 @@
 ---
 import Main from "../layouts/Main.astro";
 
+export const prerender = false;
+
 import { Camera } from "@lucide/astro";
 
 import { fetchPhotos } from "../lib/airtable.ts";
@@ -36,7 +38,7 @@ const allPhotos = await fetchPhotos();
                 {
                     allPhotos.map((photo) => (
                         <figure class="group flex flex-col gap-1.5">
-                            <div class="relative overflow-hidden rounded-lg aspect-3/4">
+                            <div class="relative overflow-hidden rounded-lg aspect-3/4 transition-all duration-200 ease">
                                 <img
                                     src={photo.src}
                                     alt={photo.title}

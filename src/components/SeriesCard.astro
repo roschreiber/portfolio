@@ -1,6 +1,8 @@
 ---
 import { Clapperboard } from '@lucide/astro'
 
+export const prerender = false;
+
 import { fetchSeries } from "../lib/airtable.ts";
 
 const allSeries = await fetchSeries();
