@@ -55,6 +55,7 @@ const isActive = (href: string) => {
               <a
                 data-astro-prefetch
                 href={item.href}
+                aria-label={item.label}
                 aria-current={active ? "page" : undefined}
                 class:list={[
                   "group flex h-10 items-center justify-center gap-2 mr-2 rounded-md px-4 text-[13px] font-medium transition-all duration-200",
@@ -85,11 +86,23 @@ const isActive = (href: string) => {
     }
   }
 
-  @media (max-width: 430px) {
-    .dock-scroll {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 0.5rem;
+  @media (max-width: 560px) {
+    .dock-scroll a {
+      gap: 0.25rem;
+      margin-right: 0.25rem;
+      padding-inline: 0.5rem;
+      font-size: 12px;
+    }
+  }
+
+  @media (max-width: 420px) {
+    .dock-scroll a span {
+      display: none;
+    }
+
+    .dock-scroll a {
+      margin-right: 0.25rem;
+      padding-inline: 0;
     }
   }
 </style>
