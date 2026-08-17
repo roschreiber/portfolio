@@ -1,5 +1,5 @@
 ---
-import { Clapperboard } from '@lucide/astro'
+import { Clapperboard, Star } from "@lucide/astro";
 
 export const prerender = false;
 
@@ -7,6 +7,22 @@ import { fetchSeries } from "../lib/airtable.ts";
 
 const allSeries = await fetchSeries();
 const series = allSeries.slice(0, 4); // get latest 4 series watched
+
+import { ExternalLinkIcon } from "./animate-ui/ExternalLinkIcon.tsx";
+
+const formattedDate = (date: string) => {
+  if (!date) {
+    return "";
+  } else {
+    return new Date(date)
+      .toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+      })
+      .toLowerCase();
+  }
+};
 ---
 
 <div
@@ -20,36 +36,89 @@ const series = allSeries.slice(0, 4); // get latest 4 series watched
     </p>
   </div>
   <div class="grid grid-cols-1 gap-4 mt-1.5">
-        <p class="text-sm font-medium">some of the latest photos i took</p>
-    </div>
-    <div class="grid grid-cols-4 gap-4 mt-2">
-        {
-            series.map((serie) => (
-                <figure class="group flex flex-col gap-1.5">
-                    <div class="relative overflow-hidden rounded-lg aspect-3/4">
-                        <img
-                            src={serie.src}
-                            alt={serie.title}
-                            class="w-full h-full object-cover"
-                            loading="lazy"
-                        />
-                        {serie.notes && (
-                            <figcaption class="absolute inset-x-0 bottom-0 flex items-center gap-1 bg-black/70 px-2 py-1 text-sm leading-tight text-white translate-y-full transition-transform duration-200 group-hover:translate-y-0">
-                                <p class="ml-2 text-xs font-bold">
-                                    {serie.notes}
-                                </p>
-                            </figcaption>
-                        )}
-                    </div>
-                    <div class="leading-tight">
-                        <p class="truncate text-xs font-bold">{serie.title}</p>
-                        <div class="flex items-center gap-1">
-                            <p class="truncate text-xs">{serie.rating}</p>
-                        </div>
-                    </div>
-                </figure>
-            ))
-        }
-    </div>
-</div>
+    <p class="text-sm font-medium">movies & series i have watched recently</p>
+  </div>
+  <div class="grid grid-cols-4 gap-4 mt-2">
+    {
+      series.map((serie) => {
+        const rating = Math.max(0, Math.min(5, Number(serie.rating) || 0));
+        return (
+          <figure class="group min-w-0">
+            <div class="relative aspect-2/3 overflow-hidden rounded-md bg-black/5">
+              <img
+                src={serie.src}
+                alt={serie.title}
+                class="w-full h-full object-cover"
+                loading="lazy"
+              />
+            </div>
 
+            <div class="mt-1.5 leading-tight">
+                <p class="trunctate text-xs font-bold">
+                    {serie.title}
+                </p>
+                
+                <p class="mt-px truncate text-xs text-[#666666]">
+                    {serie.type}
+                </p>
+            </div>
+
+                <div
+                    class="mt-1.5 flex items-center gap-1.5"
+                >
+                    <div
+                        class="flex items-center gap-px"
+                    >
+                    {
+                        [1, 2, 3, 4, 5].map((star) => {
+                            const fill = Math.max(0, Math.min(1, rating-(star-1)));
+                            return (
+                            <span class="relative block size-3">
+                          <Star
+                            size={12}
+                            class="absolute inset-0 text-[#BEBEBE]"
+                          />
+
+                          <span
+                            class="absolute inset-y-0 left-0 overflow-hidden"
+                            style={`width: ${fill * 100}%`}
+                          >
+                            <Star
+                              size={12}
+                              class="fill-black text-black"
+                            />
+                          </span>
+                          </span>
+                            )
+                        })
+                    } 
+                </div>
+
+                <p class="truncate text-xs mt-[0.45px]">
+                    {rating}/5
+                </p>
+            </div>
+
+            <div
+                class="mt-2 text-xs leading-tight"
+            >
+                <p>last watched on</p>
+                <p class="mt-0.5">{formattedDate(serie.dateWatched)}</p>
+            </div>
+
+          </figure>
+        );
+      })
+    }
+  </div>
+  <hr class="mt-4 h-px border-0 bg-[#DCDCDC]" />
+  <div class="grid grid-cols-1 gap-4 mt-2 text-right">
+    <a
+      href="/series"
+      class="series-button flex items-center justify-end gap-1"
+    >
+      <p class="text-xs font-bold">view ratings/</p>
+      <ExternalLinkIcon client:load />
+    </a>
+  </div>
+</div>

@@ -27,6 +27,13 @@ const totalPages = Math.ceil(posts.length / postsPerPage);
       >
     </p>
   </div>
+  {
+    posts.length === 0 && (
+      <div class="flex h-32 items-center justify-center text-sm text-[#666666]">
+        no posts yet! :(
+      </div>
+    )
+  }
   <div class="grid grid-cols-1 gap-4 mt-4">
     {
       posts.map((post, index) => {

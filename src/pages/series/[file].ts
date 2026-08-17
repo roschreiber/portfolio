@@ -15,6 +15,10 @@ export const GET: APIRoute = ({ params }) => {
 
   const filePath = path.join(OUT, fileName);
 
+  if (!filePath.startsWith(OUT) || !fs.existsSync(filePath)) {
+    return new Response(null, { status: 404 });
+  }
+
   if (!fs.existsSync(filePath)) {
     return new Response(null, { status: 404 });
   }

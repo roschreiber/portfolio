@@ -65,6 +65,12 @@ h6 {
   width: 100%;
 }
 
+.blog-cards-grid {
+  display: grid;
+  width: min(100%, var(--portfolio-cards-max-width));
+  gap: var(--cards-gap);
+}
+
 @media (min-width: 760px) {
   .portfolio-cards {
     --sidebar-width: clamp(18rem, 24vw, 26rem);
@@ -96,6 +102,11 @@ h6 {
   .blog-card-main {
     flex: 0 1 50%;
     max-width: 50%;
+  }
+
+  .blog-cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: 1fr;
   }
 }
 

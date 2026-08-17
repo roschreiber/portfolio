@@ -8,6 +8,11 @@ const OUT = path.resolve('./photo-cache')
 
 export const GET: APIRoute = async ({ params }) => {
   const fileName = params.file;
+
+  if (!fileName) {
+    return new Response(null, { status: 404 });
+  }
+
   const filePath = path.join(OUT, fileName);
 
   if (!filePath.startsWith(OUT) || !fs.existsSync(filePath)) {

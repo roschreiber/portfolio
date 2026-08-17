@@ -36,7 +36,7 @@ export const POST: APIRoute = async ({ request }) => {
         const newDevice: Device = {
             deviceName,
             battery,
-            charging,
+            charging: charging === true || charging === "true",
             image,
             refresh: new Date().toISOString(),
         };
