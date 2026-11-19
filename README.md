@@ -14,7 +14,7 @@ These three points are the main things that you **definitely** need to change be
 After cloning the repository, there's some things that we need to setup before all aspects of the site work properly.
 First, you need to join the [Lanyard Discord](discord.gg/lanyard) and make sure that activity sharing is enabled for it. Copy your user ID and set it as the value for the `PUBLIC_DISCORD_ID` environment variable.
 
-Your discord user ID will be used inside of the `SpotifyCard` astro component to fetch what you are listening to from Discord. This works with both discord's integrated Spotify Connection aswell as [Cider](https://cider.sh/) if you want to show what you are listening to on Apple Music. You *need* to appear as any kind of "online" on Discord for this to work.
+Your discord user ID will be used inside of the `SpotifyCard` astro component to fetch what you are listening to from Discord. This works with both discord's integrated Spotify Connection aswell as [Cider](https://cider.sh/) (which also has support for Apple Music's animated covers!) if you want to show what you are listening to on Apple Music. You *need* to appear as any kind of "online" on Discord for this to work. 
 
 ### 2. Airtable
 
@@ -33,10 +33,22 @@ Once everything's created, grab a [personal acces token](https://airtable.com/cr
 
 The `DeviceCard` and `TodayStatsCard` components don't fetch anything by themselves. Instead, they're both fed by an iOS Shortcut that POSTs to an API endpoint to the site. Both endpoints are protected by the `BATTERY_KEY` environment variable. So make sure to set that to something safe, like a hashed string. 
 
+This is what the two "Get contents of URL" actions in my Shortcut look like. `password` has to match your `BATTERY_KEY`:
+
+<p align="center">
+  <img src="media/shortcut-health.png" alt="Shortcut action posting health stats to /api/health" width="45%">
+  &nbsp;
+  <img src="media/shortcut-battery.png" alt="Shortcut action posting battery status to /api/battery" width="45%">
+</p>
+
 Images for your devices are inside of `public/imgs/devices/`. For Apple devices, using the website's photos has worked best for me. They also look the best on the site!
 
 I have one Shortcut for this set up which runs nearly every hour and whenever I open often-used apps such as WhatsApp, Instagram or my Mails. This will make the shortcut run often enough to get accurate device / health details.  
-I'm still fine- tuning my shortcut, but once it's done I will share it's link and post it here. Once iOS 27 releases, you might be able to ask Apple's Shortcut Creator AI to do this in a more optimized manner for you as well.
+I'm still fine-tuning my shortcut, but once it's done I will share it's link and post it here. Once iOS 27 releases, you might be able to ask Apple's Shortcut Creator AI to do this in a more optimized manner for you as well. I for example had some issues with the sleep data formatting after switching to a FitBit Air, so i'm using ChatGPT inside of the shortcut to format sleep data correctly for me. I tried using Apple's on-device Foundational models, but these are quite slow and often do not give proper output. 
+
+<p align="center">
+  <img src="media/shortcut-sleep-chatgpt.png" alt="ChatGPT action converting sleep samples into a JSON array" width="45%">
+</p>
 
 ### 4. Blog posts
 
@@ -67,4 +79,4 @@ npm run dev
 
 is enough to get this started. :)
 
-Feel free to fork this and make some changes to customize it! 
+Feel free to fork this and make some changes to customize it!
